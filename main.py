@@ -5,31 +5,31 @@ from src.evaluation import evaluate_models
 from src.fine_tuning import tune_ann_model, tune_cnn_model
 
 def main():
-    print("🚀 Starting Advanced Hybrid Ensemble for Diabetes Prediction")
+    print("🚀 Starting Hybrid Ensemble Diabetes Prediction")
 
-    # Step 1: Load & preprocess data
-    X_train, X_test, y_train, y_test = load_and_preprocess_data("data/diabetes.csv")
+    # Load data
+    (X_train, X_test, y_train, y_test), scaler = load_and_preprocess_data("data/Diabetes.csv")
 
-    # Step 2: Train base ML + Deep models
+    # Train ML + ANN + CNN
     base_models = train_base_models(X_train, y_train)
 
-    # Step 3: Fine-tune ANN and CNN using Keras Tuner
-    print("\n🔧 Fine-tuning ANN model...")
+    # Fine-tuning (RUN ONLY ONCE — SAVES BEST MODELS)
+    print("\n🔧 Fine-tuning ANN...")
     best_ann = tune_ann_model(X_train, y_train)
 
-    print("\n🔧 Fine-tuning CNN model...")
+    print("\n🔧 Fine-tuning CNN...")
     best_cnn = tune_cnn_model(X_train, y_train)
 
     base_models["ANN_Tuned"] = best_ann
     base_models["CNN_Tuned"] = best_cnn
 
-    # Step 4: Build Hybrid Ensemble
+    # Build hybrid ensemble (Stacking)
     hybrid_model = build_hybrid_ensemble(base_models, X_train, y_train)
 
-    # Step 5: Evaluate
+    # Evaluate everything
     evaluate_models(base_models, hybrid_model, X_test, y_test)
 
-    print("\n All steps completed successfully!")
+    print("\n🎉 All steps completed successfully!")
 
 if __name__ == "__main__":
     main()
