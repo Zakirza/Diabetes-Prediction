@@ -1,3 +1,0 @@
-def zakir():
-    print("zakir")
-    
