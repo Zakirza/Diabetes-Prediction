@@ -1,0 +1,3 @@
+def zakir():
+    print("zakir")
+    
